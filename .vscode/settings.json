@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "*.rmd": "markdown",
+        "*.in": "plain text",
+        "*.html": "html",
+        "**/templates/*.html": "django-html",
+        "**/templates/*": "django-txt",
+        "**/requirements{/**,*}.{txt,in}": "pip-requirements",
+        "cstdlib": "cpp",
+        "fstream": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "sstream": "cpp",
+        "random": "cpp",
+        "iosfwd": "cpp"
+    }
+}
