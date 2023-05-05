@@ -16,6 +16,7 @@ int main(int argc, char *argv[]) {
         vector<pair<int, char>> encoded =
             read_encoded_file(args.input_file_name);
         string decoded = LZ78::decode(encoded);
+        decoded.pop_back();
 
         ofstream output_file(args.output_file_name, std::ios_base::binary);
         output_file << decoded;

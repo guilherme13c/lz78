@@ -90,9 +90,7 @@ class LZ78 {
             // Otherwise, append the dictionary entry to the output
             else {
                 string s;
-                if (p != input.back())
-                    s = dictionary[index] + c;
-                else s = dictionary[index];
+                s = dictionary[index] + c;
                 
                 output += s;
                 dictionary[next_index] = s;
@@ -104,12 +102,37 @@ class LZ78 {
     }
 };
 
+string encode_pair(pair<int, char> p) {
+    int idx = p.first;
+    string s = "0000";
+
+    s[0] = (char)(idx >> 16);
+    s[1] = (char)(idx >> 8);
+    s[2] = (char)(idx);
+    s[3] = p.second;
+
+    return s;
+}
+
+pair<int, char> decode_pair(char *s) {
+    int idx = 0;
+
+    idx |= (unsigned char)(s[0]) << 16;
+    idx |= (unsigned char)s[1] << 8;
+    idx |= (unsigned char)s[2];
+
+    char c = s[3];
+
+    return pair<int, char>(idx, c);
+}
+
 static void save_encoded_file(string file_name,
                               vector<pair<int, char>> encoded) {
     ofstream fout(file_name);
 
     for (auto p : encoded) {
-        fout << p.first << "," << p.second << "\n";
+        auto encoded_pair = encode_pair(p);
+        fout << encoded_pair;
     }
 
     fout.close();
@@ -119,26 +142,15 @@ static vector<pair<int, char>> read_encoded_file(string input_file_name) {
     vector<pair<int, char>> encoded = vector<pair<int, char>>();
     ifstream fin(input_file_name);
 
-    string line;
-    while (getline(fin, line)) {
+    char c[4];
+    while (fin.read(c, 4)) {
         // Parse the line into pairs
-        stringstream ss(line);
+        auto decoded_pair = decode_pair(c);
 
-        string pair_str;
-        while (getline(ss, pair_str)) {
-            int comma_pos = (int)(pair_str.find(','));
-            int index = stoi(pair_str.substr(0, comma_pos));
-            char c;
-            if (comma_pos != pair_str.length() - 1) {
-                c = pair_str[comma_pos + 1];
-            } else {
-                c = '\n';
-                getline(ss, pair_str);
-            }
-            encoded.push_back({index, c});
-        }
+        encoded.push_back(decoded_pair);
     }
 
     fin.close();
+
     return encoded;
 }
