@@ -89,7 +89,11 @@ class LZ78 {
             }
             // Otherwise, append the dictionary entry to the output
             else {
-                string s = dictionary[index] + c;
+                string s;
+                if (p != input.back())
+                    s = dictionary[index] + c;
+                else s = dictionary[index];
+                
                 output += s;
                 dictionary[next_index] = s;
                 next_index++;
@@ -115,7 +119,6 @@ static vector<pair<int, char>> read_encoded_file(string input_file_name) {
     vector<pair<int, char>> encoded = vector<pair<int, char>>();
     ifstream fin(input_file_name);
 
-    // Read each line of the file
     string line;
     while (getline(fin, line)) {
         // Parse the line into pairs
@@ -125,7 +128,13 @@ static vector<pair<int, char>> read_encoded_file(string input_file_name) {
         while (getline(ss, pair_str)) {
             int comma_pos = (int)(pair_str.find(','));
             int index = stoi(pair_str.substr(0, comma_pos));
-            char c = pair_str[comma_pos + 1];
+            char c;
+            if (comma_pos != pair_str.length() - 1) {
+                c = pair_str[comma_pos + 1];
+            } else {
+                c = '\n';
+                getline(ss, pair_str);
+            }
             encoded.push_back({index, c});
         }
     }

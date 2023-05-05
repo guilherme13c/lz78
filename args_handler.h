@@ -65,9 +65,11 @@ struct cl_args get_execution_options(int argc, char **argv) {
             input_file_name.substr(0, input_file_name.find_last_of('.'));
 
     if (op == COMPRESS)
-        output_file_name = output_file_name + ".lz78";
+        output_file_name =
+            output_file_name.substr(0, output_file_name.find_last_of('.')) +
+            ".lz78";
     if (op == DECOMPRESS)
-        output_file_name = output_file_name + ".txt";
+        output_file_name.substr(0, output_file_name.find_last_of('.')) + ".txt";
 
     args.input_file_name = input_file_name;
     args.output_file_name = output_file_name;
