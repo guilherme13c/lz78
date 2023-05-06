@@ -9,15 +9,17 @@ Para utilizar o programa, primeiro é necessário compilá-lo. Para isso, basta 
 ## Compressão
 
 Para comprimir um arquivo, usamos o seguinte comando:
-`lz78-compress -c <caminho-do-arquivo-para-comprimir> [-o <caminho-do-arquivo-comprimido>]`
-
+```
+lz78-compress -c <caminho-do-arquivo-para-comprimir> [-o <caminho-do-arquivo-comprimido>]
+```
 A segunda opção (`-o <comprimido>`) é opcional. Por padrão, o arquivo de saída será criado no mesmo diretório do arquivo de entrada e receberá o nome da entrada com a extensão `.lz78`.
 
 ## Descompressão
 
 Para descomprimir um arquivo, usamos o seguinte comando:
-`lz78-compress -x <caminho-do-arquivo-para-descomprimir> [-o <caminho-do-arquivo-descomprimido>]`
-
+```
+lz78-compress -x <caminho-do-arquivo-para-descomprimir> [-o <caminho-do-arquivo-descomprimido>]
+```
 A segunda opção (`-o <comprimido>`) é opcional. Por padrão, o arquivo de saída será criado no mesmo diretório do arquivo de entrada e receberá o nome da entrada com a extensão `.txt`.
 
 # Taxa de Compressão
@@ -50,14 +52,13 @@ Como dito anteriormente, o algoritmo usado foi o [LZ78](https://pt.wikipedia.org
 ### Otimização
 
 Se armazados de forma convencional, cada tupla presente no vetor seria transcrita para um arquivo de texto na forma:
-
-> `<índice>,<caractere>`\
-> `<índice>,<caractere>`\
-> `<índice>,<caractere>`\
-> ...
-
+```
+ <índice>,<caractere>
+ <índice>,<caractere>
+ <índice>,<caractere>
+ ...
+```
 Essa representação usaria um byte para armazenar a vírgula (ou o outro caractere escolhido) que separa os elementos, um byte para armazenar a quebra de linha (ou o outro caractere escolhido) que separa as tuplas e um byte para armazenar o caractere, além de um byte para cada algarismo do índice (representado em base decimal), o que pode se tornar muito ineficiente para grandes textos, uma vez que os índices tendem a se tornar números cada vez maiores com o crescimento do texto.
 
 Podemos obter uma maior economia de espaço se fixarmos o tamanho de cada tupla, utilizando um número fixo de bytes para o índice, mais um byte para o caractere. Dessa forma nos livramos da necessidade de armazenar os caracteres para separar os elementos e as tuplas. Dessa forma, foram utilizados 3 bytes para representar o índice, e mais um para representar o caractere. Assim, toda tupla ocupa exatamente 4 bytes. Ao escolher representar cada índice com 3 bytes, limitamos o dicionário ao indice máximo de $(2^8)^3=2^{24}= 16.777.216$. Essa limitação não é um problema, pois mesmo os maiores livros (por exemplo a Bíblia Sagrada ou A Revolta de Atlas (Ayn Rand)) possuem cerca de 3 a 4 milhões de caracteres, e considerando que, a medida que mais texto é inserido, maior será a probabilidade de um prefixo se repetir. Dessa forma, é impossível, na prática, superar esse limite.
 
----
