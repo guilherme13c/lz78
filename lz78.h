@@ -6,13 +6,12 @@
 #include <unordered_map>
 #include <vector>
 
+using std::pair;
+using std::vector;
+using std::string;
 using std::ifstream;
 using std::ofstream;
-using std::pair;
-using std::string;
-using std::stringstream;
 using std::unordered_map;
-using std::vector;
 
 // The Node class represents a node in the compact trie dictionary
 class Node {
